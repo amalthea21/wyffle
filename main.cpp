@@ -17,7 +17,7 @@ char getch() {
     raw.c_cc[VMIN] = 1;
     raw.c_cc[VTIME] = 0;
 
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) < 0) {
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &raw) < 0) {
         perror("tcsetattr");
         return -1;
     }
@@ -26,7 +26,7 @@ char getch() {
         perror("read()");
     }
 
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &old) < 0) {
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &old) < 0) {
         perror("tcsetattr restore");
     }
 
