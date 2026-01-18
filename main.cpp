@@ -6,6 +6,7 @@
 #include <sys/ioctl.h>
 #include <string>
 #include <thread>
+#include <vector>
 
 #include "include/Formatting.h"
 
@@ -101,9 +102,11 @@ void printMenu() {
     cout.flush();
 }
 
-void printText(vector<string> text) {
+void printText(vector<string> text, int pos) {
     for (int i = 0; i < text.size(); i++) {
-        cout << text.at(i);
+        if (i == pos) {
+            cout << ansi::BG_WHITE << ansi::BLACK << text.at(i) << ansi::RESET;
+        } else cout << text.at(i);
     }
 }
 
@@ -116,16 +119,48 @@ int main(int argc, char* argv[]) {
     do {
         cout << ansi::CLEAR_SCREEN;
         printMenu();
-        printText(text);
+        cout << ansi::moveTo(4, 1);
+        printText(text, pos);
+        cout.flush();
 
         key = readKey();
 
-        if (key.length() == 1 && key[0] > 32 && key[0] < 127) {
+        if (key == "Left") {
+            if (pos > 0) {
+                pos--;
+            }
+        } else if (key == "Right") {
+            pos++;
+        } else if (key == "Up") {
+        } else if (key == "Down") {
+        } else if (key == "Home") {
+            pos = 0;
+        } else if (key == "End") {
+            pos = text.size();
+        } else if (key == "Backspace") {
+            if (pos > 0) {
+                pos--;
+                if (pos < text.size()) {
+                    text[pos] = "";
+                }
+            }
+        } else if (key == "Enter") {
+            while (pos >= text.size())
+                text.push_back("");
+            text[pos] += "\n";
+            pos++;
+        } else if (key == "Space") {
+            while (pos >= text.size())
+                text.push_back("");
+            text[pos] += ' ';
+            pos++;
+        } else if (key.length() == 1 && key[0] >= 32 && key[0] < 127) {
             while (pos >= text.size())
                 text.push_back("");
             text[pos] += key;
             pos++;
         }
+
 
         this_thread::sleep_for(chrono::milliseconds(1000/20));
     } while (key != "F1");
