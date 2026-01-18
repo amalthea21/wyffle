@@ -96,10 +96,10 @@ string getBorder() {
 
 void printMenu() {
     cout << ansi::HOME;
-    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_RED << "QUIT: [F1]" << ansi::RESET << " ";
-    cout << " " << ansi::BLACK << ansi::BG_CYAN << "FG COLORS: [F2]" << ansi::RESET << " ";
-    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_GREEN << "BG COLORS: [F3]" << ansi::RESET << " ";
-    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_YELLOW << "FORMATTING: [F4]" << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_RED << " QUIT: [F1] " << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_CYAN << " FG COLORS: [F2] " << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_GREEN << " BG COLORS: [F3] " << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_YELLOW << " FORMATTING: [F4] " << ansi::RESET << " ";
     cout << endl;
 
     cout << endl; // Leave line for Submenu
@@ -112,29 +112,34 @@ void printSubMenu(string key) {
     cout << ansi::CLEAR_LINE;
 
     if (key == "F2") { // Foreground
-        // Add background for visibility
-        cout << ansi::BG_BLACK << ansi::BRIGHT_RED << "[1]R " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_GREEN << "[2]G " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_WHITE << "[3]W " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_YELLOW << "[4]Y " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_BLACK << "[5]K " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_BLUE << "[6]B " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_CYAN << "[7]C " << ansi::RESET;
-        cout << ansi::BG_BLACK << ansi::BRIGHT_MAGENTA << "[8]M " << ansi::RESET;
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_RED << " RED: [1] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_GREEN << " GREEN: [2] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_WHITE << " WHITE: [3] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_YELLOW << " YELLOW: [4] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_BLACK << " BLACK: [5] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_BLUE << " BLUE: [6] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_CYAN << " CYAN: [7] " << ansi::RESET << " ";
+        cout << " " << ansi::BG_BLACK << ansi::BRIGHT_MAGENTA << " MAGENTA: [8] " << ansi::RESET << " ";
     }
     else if (key == "F3") { // Background
-        // Remove extra spaces for consistency
-        cout << ansi::BLACK << ansi::BG_BRIGHT_RED << "[1]R " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_GREEN << "[2]G " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_WHITE << "[3]W " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_YELLOW << "[4]Y " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_BLACK << "[5]K " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_BLUE << "[6]B " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_CYAN << "[7]C " << ansi::RESET;
-        cout << ansi::BLACK << ansi::BG_BRIGHT_MAGENTA << "[8]M " << ansi::RESET;
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_RED << " RED: [1] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_GREEN << " GREEN: [2] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << " WHITE: [3] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_YELLOW << " YELLOW: [4] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_BLACK << " BLACK: [5] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_BLUE << " BLUE: [6] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_CYAN << " CYAN: [7] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_MAGENTA << " MAGENTA: [8] " << ansi::RESET << " ";
     }
-    else if (key == "F4") { // Formatting - if you plan to add this
-        cout << "Bold: [1]  Italic: [2]  Underline: [3]  Reset: [4]";
+    else if (key == "F4") { // Formatting
+        cout << " " << ansi::BLACK << ansi::BOLD << " BOLD: [1] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::DIM << " DIM: [2] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::ITALIC << " ITALIC: [3] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::UNDERLINE << " UNDERLINE: [4] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BLINK << " BLINK: [5] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::REVERSE << " REVERSE: [6] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::HIDDEN << " HIDDEN: [7] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::STRIKETHROUGH << " STRIKETHROUGH: [8] " << ansi::RESET << " ";
     }
 
     cout.flush();
