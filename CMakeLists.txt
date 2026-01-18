@@ -3,4 +3,5 @@ project(wyffle)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(wyffle main.cpp)
+add_executable(wyffle main.cpp
+        include/Formatting.h)
