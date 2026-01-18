@@ -7,6 +7,10 @@
 // ============================================================================
 
 namespace ansi {
+    // Cursor hide/show
+    const std::string HIDE_CURSOR = "\033[?25l";
+    const std::string SHOW_CURSOR = "\033[?25h";
+
     // Reset
     const std::string RESET = "\033[0m";
 

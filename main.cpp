@@ -96,71 +96,154 @@ string getBorder() {
 
 void printMenu() {
     cout << ansi::HOME;
-    cout << ansi::BG_BRIGHT_RED << "QUIT: [F1]" << ansi::RESET;
+    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_RED << "QUIT: [F1]" << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_CYAN << "FG COLORS: [F2]" << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_GREEN << "BG COLORS: [F3]" << ansi::RESET << " ";
+    cout << " " << ansi::BLACK << ansi::BG_BRIGHT_YELLOW << "FORMATTING: [F4]" << ansi::RESET << " ";
     cout << endl;
+
+    cout << endl; // Leave line for Submenu
     cout << getBorder() << endl;
+    cout.flush();
+}
+
+void printSubMenu(string key) {
+    cout << ansi::moveTo(2, 1);
+    cout << ansi::CLEAR_LINE;
+
+    if (key == "F2") { // Foreground
+        // Add background for visibility
+        cout << ansi::BG_BLACK << ansi::BRIGHT_RED << "[1]R " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_GREEN << "[2]G " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_WHITE << "[3]W " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_YELLOW << "[4]Y " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_BLACK << "[5]K " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_BLUE << "[6]B " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_CYAN << "[7]C " << ansi::RESET;
+        cout << ansi::BG_BLACK << ansi::BRIGHT_MAGENTA << "[8]M " << ansi::RESET;
+    }
+    else if (key == "F3") { // Background
+        // Remove extra spaces for consistency
+        cout << ansi::BLACK << ansi::BG_BRIGHT_RED << "[1]R " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_GREEN << "[2]G " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_WHITE << "[3]W " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_YELLOW << "[4]Y " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_BLACK << "[5]K " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_BLUE << "[6]B " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_CYAN << "[7]C " << ansi::RESET;
+        cout << ansi::BLACK << ansi::BG_BRIGHT_MAGENTA << "[8]M " << ansi::RESET;
+    }
+    else if (key == "F4") { // Formatting - if you plan to add this
+        cout << "Bold: [1]  Italic: [2]  Underline: [3]  Reset: [4]";
+    }
+
     cout.flush();
 }
 
 void printText(vector<string> text, int pos) {
     for (int i = 0; i < text.size(); i++) {
         if (i == pos) {
-            cout << ansi::BG_WHITE << ansi::BLACK << text.at(i) << ansi::RESET;
-        } else cout << text.at(i);
+            if (text.at(i).empty()) {
+                cout << ansi::BG_BRIGHT_WHITE << " " << ansi::RESET;
+            } else {
+                cout << ansi::BG_BRIGHT_WHITE << ansi::BLACK << text.at(i) << ansi::RESET;
+            }
+        } else {
+            cout << text.at(i);
+        }
+    }
+
+    if (pos >= text.size()) {
+        cout << ansi::BG_BRIGHT_WHITE << " " << ansi::RESET;
+    }
+}
+
+void editText(string key, vector<string> &text, int &pos) {
+    if (key == "Left") {
+        if (pos > 0)
+            pos--;
+    }
+    else if (key == "Right") {
+        if (pos < text.size())
+            pos++;
+    }
+    else if (key == "Up") {
+        for (int i = pos - 1; i >= 0; i--) {
+            if (text.at(i) == "\n") {
+                pos = i;
+                break;
+            }
+        }
+    }
+    else if (key == "Down") {
+        for (int i = pos + 1; i < text.size(); i++) {
+            if (text.at(i) == "\n") {
+                pos = i + 1;
+                break;
+            }
+        }
+    }
+    else if (key == "Home") {
+        pos = 0;
+    }
+    else if (key == "End") {
+        pos = text.size();
+    }
+    else if (key == "Backspace") {
+        if (pos > 0) {
+            pos--;
+            if (pos < text.size()) {
+                text[pos] = "";
+            }
+        }
+    }
+    else if (key == "Delete") {
+        if (pos < text.size()) {
+            text[pos+1] = "";
+        }
+    }
+    else if (key == "Enter") {
+        text.insert(text.begin() + pos, "\n");
+        pos++;
+    }
+    else if (key == "Space") {
+        while (pos >= text.size())
+            text.push_back("");
+        text[pos] += ' ';
+        pos++;
+    }
+    else if (key.length() == 1 && key[0] >= 32 && key[0] < 127) { // Normal character
+        while (pos >= text.size())
+            text.push_back("");
+        text[pos] += key;
+        pos++;
     }
 }
 
 int main(int argc, char* argv[]) {
+    cout << ansi::HIDE_CURSOR;
     fflush(stdout);
     string key;
+    string activeSubmenu = "";
     vector<string> text;
     int pos = 0;
 
     do {
         cout << ansi::CLEAR_SCREEN;
         printMenu();
+        printSubMenu(activeSubmenu);
         cout << ansi::moveTo(4, 1);
         printText(text, pos);
         cout.flush();
 
         key = readKey();
 
-        if (key == "Left") {
-            if (pos > 0) {
-                pos--;
-            }
-        } else if (key == "Right") {
-            pos++;
-        } else if (key == "Up") {
-        } else if (key == "Down") {
-        } else if (key == "Home") {
-            pos = 0;
-        } else if (key == "End") {
-            pos = text.size();
-        } else if (key == "Backspace") {
-            if (pos > 0) {
-                pos--;
-                if (pos < text.size()) {
-                    text[pos] = "";
-                }
-            }
-        } else if (key == "Enter") {
-            while (pos >= text.size())
-                text.push_back("");
-            text[pos] += "\n";
-            pos++;
-        } else if (key == "Space") {
-            while (pos >= text.size())
-                text.push_back("");
-            text[pos] += ' ';
-            pos++;
-        } else if (key.length() == 1 && key[0] >= 32 && key[0] < 127) {
-            while (pos >= text.size())
-                text.push_back("");
-            text[pos] += key;
-            pos++;
+        // Toggle submenu
+        if (key == "F2" || key == "F3" || key == "F4") {
+            activeSubmenu = (activeSubmenu == key) ? "" : key;
         }
 
+        editText(key, text, pos);
 
         this_thread::sleep_for(chrono::milliseconds(1000/20));
     } while (key != "F1");
