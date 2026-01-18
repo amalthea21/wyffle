@@ -132,14 +132,14 @@ void printSubMenu(string key) {
         cout << " " << ansi::BLACK << ansi::BG_BRIGHT_MAGENTA << " MAGENTA: [8] " << ansi::RESET << " ";
     }
     else if (key == "F4") { // Formatting
-        cout << " " << ansi::BLACK << ansi::BOLD << " BOLD: [1] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::DIM << " DIM: [2] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::ITALIC << " ITALIC: [3] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::UNDERLINE << " UNDERLINE: [4] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::BLINK << " BLINK: [5] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::REVERSE << " REVERSE: [6] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::HIDDEN << " HIDDEN: [7] " << ansi::RESET << " ";
-        cout << " " << ansi::BLACK << ansi::STRIKETHROUGH << " STRIKETHROUGH: [8] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::BOLD << " BOLD: [1] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::DIM << " DIM: [2] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::ITALIC << " ITALIC: [3] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::UNDERLINE << " UNDERLINE: [4] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::BLINK << " BLINK: [5] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::REVERSE << " REVERSE: [6] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::HIDDEN << " HIDDEN: [7] " << ansi::RESET << " ";
+        cout << " " << ansi::BLACK << ansi::BG_BRIGHT_WHITE << ansi::STRIKETHROUGH << " STRIKETHROUGH: [8] " << ansi::RESET << " ";
     }
 
     cout.flush();
@@ -225,6 +225,53 @@ void editText(string key, vector<string> &text, int &pos) {
     }
 }
 
+bool applyFormatting(string key, string activeSubmenu, vector<string> &text, int &pos) {
+    if (activeSubmenu.empty()) return false;
+
+    string formatting = "";
+
+    if (activeSubmenu == "F2") { // Foreground colors
+        if (key == "1") formatting = ansi::BRIGHT_RED;
+        else if (key == "2") formatting = ansi::BRIGHT_GREEN;
+        else if (key == "3") formatting = ansi::BRIGHT_WHITE;
+        else if (key == "4") formatting = ansi::BRIGHT_YELLOW;
+        else if (key == "5") formatting = ansi::BRIGHT_BLACK;
+        else if (key == "6") formatting = ansi::BRIGHT_BLUE;
+        else if (key == "7") formatting = ansi::BRIGHT_CYAN;
+        else if (key == "8") formatting = ansi::BRIGHT_MAGENTA;
+    }
+    else if (activeSubmenu == "F3") { // Background colors
+        if (key == "1") formatting = ansi::BG_BRIGHT_RED;
+        else if (key == "2") formatting = ansi::BG_BRIGHT_GREEN;
+        else if (key == "3") formatting = ansi::BG_BRIGHT_WHITE;
+        else if (key == "4") formatting = ansi::BG_BRIGHT_YELLOW;
+        else if (key == "5") formatting = ansi::BG_BRIGHT_BLACK;
+        else if (key == "6") formatting = ansi::BG_BRIGHT_BLUE;
+        else if (key == "7") formatting = ansi::BG_BRIGHT_CYAN;
+        else if (key == "8") formatting = ansi::BG_BRIGHT_MAGENTA;
+    }
+    else if (activeSubmenu == "F4") { // Text formatting
+        if (key == "1") formatting = ansi::BOLD;
+        else if (key == "2") formatting = ansi::DIM;
+        else if (key == "3") formatting = ansi::ITALIC;
+        else if (key == "4") formatting = ansi::UNDERLINE;
+        else if (key == "5") formatting = ansi::BLINK;
+        else if (key == "6") formatting = ansi::REVERSE;
+        else if (key == "7") formatting = ansi::HIDDEN;
+        else if (key == "8") formatting = ansi::STRIKETHROUGH;
+    }
+
+    if (!formatting.empty()) {
+        while (pos >= text.size())
+            text.push_back("");
+        text.insert(text.begin() + pos, formatting);
+        pos++;
+        return true;
+    }
+
+    return false;
+}
+
 int main(int argc, char* argv[]) {
     cout << ansi::HIDE_CURSOR;
     fflush(stdout);
@@ -243,12 +290,15 @@ int main(int argc, char* argv[]) {
 
         key = readKey();
 
-        // Toggle submenu
         if (key == "F2" || key == "F3" || key == "F4") {
             activeSubmenu = (activeSubmenu == key) ? "" : key;
         }
 
-        editText(key, text, pos);
+        bool formattingApplied = applyFormatting(key, activeSubmenu, text, pos);
+
+        if (!formattingApplied) {
+            editText(key, text, pos);
+        }
 
         this_thread::sleep_for(chrono::milliseconds(1000/20));
     } while (key != "F1");
