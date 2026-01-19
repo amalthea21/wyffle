@@ -11,11 +11,14 @@ Wyffle is a terminal text editor, most similiar to Nano.
 ## **🔨 How to build:**
 
 ```
-mkdir cmake-build-debug    // CMake directory
+mkdir cmake-build-debug
 cd cmake-build-debug
-cmake ..    // To initialize the repository
+cmake ..
 cmake --build .
+```
 
-// To run it, just:
+For running, just run the executable in cmake-build-debug
+
+```
 ./wyffle
 ```
