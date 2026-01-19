@@ -3,9 +3,11 @@ project(wyffle)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(wyffle main.cpp
-        include/Formatting.h
-        include/printFunctions.h
-        src/printFunctions.cpp
-        include/fileFunctions.h
-        src/fileFunctions.cpp)
+file(GLOB SOURCES "src/*.cpp")
+file(GLOB HEADERS "include/*.h" "include/*.hpp")
+
+add_executable(wyffle
+        main.cpp
+        ${SOURCES}
+        ${HEADERS}
+)

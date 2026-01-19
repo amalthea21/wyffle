@@ -194,7 +194,8 @@ bool applyFormatting(string key, string activeSubmenu, vector<string> &text, int
             }
             return true;
         }
-        else if (key == "2") { // Load
+
+        if (key == "2") { // Load
             string path = getFilePathInSubmenu("LOAD");
             if (!path.empty()) {
                 vector<string> loadedText = readFromFile(path);
